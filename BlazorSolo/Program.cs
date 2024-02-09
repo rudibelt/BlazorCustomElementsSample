@@ -1,7 +1,13 @@
+using BlazorSolo.Components;
+using Microsoft.AspNetCore.Components.Web;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddRazorComponents()
+    .AddInteractiveWebAssemblyComponents()
+    .AddInteractiveServerComponents();
 
 var app = builder.Build();
 
@@ -16,11 +22,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseBlazorFrameworkFiles();
+//app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapFallbackToFile("index.html");
 
+app.MapRazorComponents<Counter>()
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode();
+//.AddAdditionalAssemblies(typeof(Counter).Assembly);
+app.UseAntiforgery();
 app.Run();
